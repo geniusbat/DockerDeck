@@ -1,11 +1,12 @@
 from github import Github
 from github import Auth
 
+import os
 
 
 
 def get_github():
-    auth = Auth.Token("")
+    auth = Auth.Token(os.environ.get("DOCKERDECK_GITHUB_KEY", ""))
     g = Github(auth=auth)
     return g
 
