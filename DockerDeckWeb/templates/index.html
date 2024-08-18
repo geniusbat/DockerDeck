@@ -8,7 +8,7 @@
     {% for project, files in data.items %}
         {{project}}
         {% for file in files %}
-            {{file}}
+            <a href="{% url "get_file" project file%}">{{file}}</a>
         {% endfor %}
     {% endfor %}
 {% endblock content %}
