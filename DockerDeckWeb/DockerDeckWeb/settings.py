@@ -13,7 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DOCKER_DECK_KEY', "django-insecure-%4s-*m^&#n1$k!^@q0v=iy)4=xtvkwlvb3%ud_d7$c0w1s17c*")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getenv('DOCKER_DECK_DEBUG', "False") == "True":
+#if os.getenv('DOCKER_DECK_DEBUG', "False") == "True":
+if True:
     DEBUG = True
 else:
     DEBUG = False

@@ -1,18 +1,12 @@
 from github import Github
 from github import Auth
+import github_utils
 
 import os
 
 
-
-def get_github():
-    auth = Auth.Token(os.environ.get("DOCKERDECK_GITHUB_KEY", ""))
-    g = Github(auth=auth)
-    return g
-
-g = get_github()
-
-def get_docker_related_files(g):
+def get_docker_related_files(g, repository):
+    repo = g.get_repo(repository)
     name_files_to_look_for = ["Dockerfile", "compose.yaml", "dockerfile"]
     files = []
     recursive_search = []
@@ -43,13 +37,6 @@ def get_docker_related_files(g):
 
 #for repo in #g.get_user().get_repos():
 if True:
-    repo = g.get_repo("geniusbat/InventoryGMA")
-    print(repo.name)
-    master = repo.get_branch("master")
-    commit = master.commit
-    commit_date = commit.commit.author.date
-    print(commit_date)
-    files = get_docker_related_files(g)
-    print(files)
-
-g.close()
+    g = github_utils.get_github()
+    files = github_utils.get_docker_related_files(g, "geniusbat/InventoryGMA")
+    github_utils.get_file(g, "InventoryGMA", files[0])
