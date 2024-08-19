@@ -21,12 +21,37 @@ def project_build_save_images(project_name):
     Repo.clone_from(repo_url, "clone_repo/")
     time.sleep(0.2)
     for file in docker_files:
-        #print("Started: ", file)
         image, output = build_image(client, file, project_name)
         time.sleep(1)
         save_image(project_name, image, file)
         time.sleep(0.5)
 
+    #Remove the cloned repository
+    delete_dir("clone_repo/")
+
+def project_build_save_specific_image(project_name, file_name):
+    file_path = os.path.join(usual_data.location, project_name, file_name)
+    #Make sure file exists
+    if not os.path.exists(file_path):
+        print("docker_utils project_build_save_specific_image: ",file_path," does not exist")
+        return 
+    #Initialize stuff
+    client = docker.from_env()
+    g = github_utils.get_github()
+    repo = github_utils.get_repository(g, project_name)
+    repo_url = repo.clone_url
+
+    #Clone repo
+    if os.path.exists("clone_repo/"):
+        delete_dir("clone_repo/")
+    Repo.clone_from(repo_url, "clone_repo/")
+    time.sleep(0.2)
+
+    #Create image
+    image, output = build_image(client, file_path, project_name)
+    time.sleep(1)
+    save_image(project_name, image, file_name)
+    time.sleep(0.5)
 
     #Remove the cloned repository
     delete_dir("clone_repo/")
@@ -87,4 +112,5 @@ for file in docker_files:
             write_file.write(chunk)
     break
 '''
-project_build_save_images("InventoryGMA")
+if __name__ == "__main__":
+    project_build_save_images("InventoryGMA")

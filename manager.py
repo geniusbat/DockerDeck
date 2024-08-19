@@ -3,6 +3,8 @@ import json
 from datetime import datetime
 import github_utils
 import usual_data
+import docker_utils
+
 
 project_data_location = "manager_project_data"
 
@@ -58,7 +60,18 @@ def force_update_files(project_name):
     
     github_utils.close_connection(g)
 
+#Iterate over all projects and create+export the dockerfiles as images
+def projects_build_save_images():
+    for repository_name in usual_data.repositories:
+        build_save_project_images(repository_name)
+
 #--------Auxiliar functions--------
+
+def build_save_project_images(project_name):
+    docker_utils.project_build_save_images(project_name)
+
+def build_save_specific_image(project_name, file_name):
+    docker_utils.project_build_save_specific_image(project_name, file_name)
 
 def load_project_data():
     import os.path
@@ -84,4 +97,4 @@ if __name__ == "__main__":
             
     #Default process
     else:
-        update_files()
+        build_save_specific_image("InventoryGMA", "Dockerfile")
