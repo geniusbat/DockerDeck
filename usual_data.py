@@ -1,8 +1,12 @@
+from pathlib import Path
+
 user = "geniusbat"
 
 repositories = [
     "InventoryGMA"
 ]
+
+project_dir = Path(__file__).resolve().parent
 
 location = "docker_contents"
 

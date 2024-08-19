@@ -39,12 +39,19 @@ def get_docker_related_files(g, repo:Repository):
     return files
 
 def save_file(projectName, file:ContentFile):
+    #Create repository directory if it doesnt exist
+    if not os.path.exists(os.path.join(usual_data.project_dir, usual_data.location, projectName)):
+        os.mkdir(os.path.join(usual_data.project_dir, usual_data.location, projectName))
+    #Save file
     with open(os.path.join(usual_data.location, projectName)+"/"+file.name, "w") as write_file:
         write_file.writelines(file.decoded_content.decode('utf-8'))
 
 def save_files(projectName, files:list[ContentFile]):
+    #Create repository directory if it doesnt exist
+    if not os.path.exists(os.path.join(usual_data.project_dir, usual_data.location, projectName)):
+        os.mkdir(os.path.join(usual_data.project_dir, usual_data.location, projectName))
     for file in files:
-        with open(os.path.join(usual_data.location, projectName)+"/"+file.name, "w") as write_file:
+        with open(os.path.join(usual_data.project_dir, usual_data.location, projectName, file.name), "w") as write_file:
             write_file.writelines(file.decoded_content.decode('utf-8'))
 
 def get_repo_last_update(repository:Repository):

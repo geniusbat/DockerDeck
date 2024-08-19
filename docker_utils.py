@@ -28,6 +28,8 @@ def project_build_save_images(project_name):
             time.sleep(1)
             save_image(project_name, image, file)
             time.sleep(0.5)
+            #Delete created image as only needed to save it as tar
+            client.images.remove(image.id, force=True)
 
     #Remove the cloned repository
     delete_dir("clone_repo/")
@@ -54,7 +56,8 @@ def project_build_save_specific_image(project_name, file_name):
     time.sleep(1)
     save_image(project_name, image, file_name)
     time.sleep(0.5)
-
+    #Delete created image as only needed to save it as tar
+    client.images.remove(image.id, force=True)
     #Remove the cloned repository
     delete_dir("clone_repo/")
 
@@ -87,8 +90,7 @@ def delete_dir(base):
 def can_create_image_from_file(project_name, file_name):
     file_path = os.path.join(usual_data.location, project_name, file_name)
     with open(file_path, "r") as file:
-        line = file.readline(0)
-        if "--SECRETS-INSIDE--" in line:
+        if "--SECRETS-REQUIRED--" in file.read():
             return False
         else:
             return True
