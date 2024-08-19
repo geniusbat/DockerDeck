@@ -65,13 +65,15 @@ def projects_build_save_images():
     for repository_name in usual_data.repositories:
         build_save_project_images(repository_name)
 
-#--------Auxiliar functions--------
-
+#Update all images given the project name
 def build_save_project_images(project_name):
     docker_utils.project_build_save_images(project_name)
 
+#Update the image given the dockerfile name and project name
 def build_save_specific_image(project_name, file_name):
     docker_utils.project_build_save_specific_image(project_name, file_name)
+
+#--------Auxiliar functions--------
 
 def load_project_data():
     import os.path
@@ -94,7 +96,6 @@ if __name__ == "__main__":
         #Function and 1 arguments given
         elif len(sys.argv) == 3:
             globals()[sys.argv[1]](sys.argv[2])
-            
     #Default process
     else:
-        build_save_specific_image("InventoryGMA", "Dockerfile")
+        update_files()

@@ -38,5 +38,5 @@ def get_docker_related_files(g, repository):
 #for repo in #g.get_user().get_repos():
 if True:
     g = github_utils.get_github()
-    files = github_utils.get_docker_related_files(g, "geniusbat/InventoryGMA")
+    files = github_utils.get_docker_related_files(g, "")
     github_utils.get_file(g, "InventoryGMA", files[0])
