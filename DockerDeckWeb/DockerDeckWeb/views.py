@@ -42,9 +42,29 @@ def index(request):
 def get_file(request, project, file_name):
     try:
         aux = os.path.join(PROJECT_DIR, usual_data.location, project, file_name)
-        with open(aux, "r") as file:
-            data = file.read()
-        response = HttpResponse(data)
+        attachment = 'attachment; filename="'+file_name+'"'
+        #Work with tar files
+        if ".tar" in file_name:
+            with open(aux, "rb") as file:
+                data = file.read()
+            response = HttpResponse(
+                data,
+                headers={
+                    "Content-Type": "application/octet-stream",
+                    "Content-Disposition": attachment,
+                },
+                )
+        #Any other plan text files
+        else:
+            with open(aux, "r") as file:
+                data = file.read()
+            response = HttpResponse(
+                data,
+                headers={
+                    "Content-Type": "text/plain",
+                    "Content-Disposition": attachment,
+                },
+                )
     except IOError:
         response = HttpResponseNotFound('<h1>File not exist</h1>')
 

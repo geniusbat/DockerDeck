@@ -1,9 +1,8 @@
 import docker
 from git import Repo
-import shutil
 import os, os.path
 import stat
-
+import time
 import github_utils
 import usual_data
 
@@ -20,11 +19,14 @@ def project_build_save_images(project_name):
     if os.path.exists("clone_repo/"):
         delete_dir("clone_repo/")
     Repo.clone_from(repo_url, "clone_repo/")
-    
+    time.sleep(0.2)
     for file in docker_files:
-        print("Started: ", file)
+        #print("Started: ", file)
         image, output = build_image(client, file, project_name)
+        time.sleep(1)
         save_image(project_name, image, file)
+        time.sleep(0.5)
+
 
     #Remove the cloned repository
     delete_dir("clone_repo/")
