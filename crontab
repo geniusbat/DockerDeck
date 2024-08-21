@@ -1,0 +1,1 @@
+0 */12 * * * root python /Docker-deck/manager.py update_files_and_images &>> /Docker-deck/cron_output

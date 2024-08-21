@@ -1,0 +1,19 @@
+FROM python:3.12.4
+
+WORKDIR /Docker-deck
+
+ENV PYTHONUNBUFFERED=1
+ENV DOCKERDECK_DJ_KEY=<>
+ENV DOCKERDECK_DEBUG=<>
+
+RUN apt-get update && apt-get -y install nano
+
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+COPY ./DockerDeckWeb .
+COPY usual_data.py .
+
+EXPOSE 8030
+
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8030"]

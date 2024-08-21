@@ -1,0 +1,12 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+docker_contents/*
+venv
+README.md
+manager_project_data
+*.sqlite3
+.git/

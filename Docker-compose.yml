@@ -1,0 +1,29 @@
+services: 
+  django-web: 
+    build:
+      context: .
+      dockerfile: Dockerfile_web
+    ports: 
+      - '8030:8030'
+    volumes:
+      - 'docker-deck-content:/Docker-deck/docker_contents:rw'
+    
+
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8030"]
+
+  docker-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile_manager
+    volumes:
+      - 'docker-deck-content:/Docker-deck/docker_contents:rw'
+    expose:
+      - "80"
+      - "443"
+      - "9418"
+      - "22"
+    command: ["cron", "-f"]
+
+volumes:
+  docker-deck-content:
+    external: true

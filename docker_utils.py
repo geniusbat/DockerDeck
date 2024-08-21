@@ -13,7 +13,7 @@ def project_build_save_images(project_name):
     repo = github_utils.get_repository(g, project_name)
     repo_url = repo.clone_url
     #Get the location of all Dockerfile files
-    docker_files = [x.path for x in github_utils.get_docker_related_files(g, repo) if "Dockerfile" in x.name]
+    docker_files = [x.path for x in github_utils.get_docker_related_files(g, repo) if "Dockerfile" in x.name or "er-compose" in x.name]
     github_utils.close_connection(g)
     #Clone a repository
     #First if clone_repo dir exists remove it
@@ -90,10 +90,10 @@ def delete_dir(base):
 def can_create_image_from_file(project_name, file_name):
     file_path = os.path.join(usual_data.location, project_name, file_name)
     with open(file_path, "r") as file:
-        if "--SECRETS-REQUIRED--" in file.read():
-            return False
-        else:
+        if "--AUTOMATE-BUILD--" in file.read():
             return True
+        else:
+            return False
     print("docker_utils can_create_image_from_file: Apparently something didn't work given the path: ", file_path)
     return False
 

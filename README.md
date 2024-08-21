@@ -10,7 +10,7 @@ Adding project to be monitored by docker-deck:
 2) Must be added to "repositories" in usual_data.py
 
 Doing thus will monitor all files found in the repository (recursively, so no need to add it to root directory) containing "Dockerfile", "compose.yaml" or "dockerfile"
-*Remember that to make an exception of a specific dockerfile not being an image you must add --SECRETS-REQUIRED-- as the first line
+If you want a files (dockerfile and compose.yml) add "--AUTOMATE-BUILD--" in the first line.
 
 Project has a website where one can get and upload dockerfiles:
 1) The url "add/<project>/" adds a file found in "file" to the project, it requires a password.

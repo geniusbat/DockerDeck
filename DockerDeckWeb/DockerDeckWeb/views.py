@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseNotFound
 from pathlib import Path
 import sys
 sys.path.append("..")
-import github_utils
 import usual_data
 
 import hashlib
@@ -13,7 +12,7 @@ import os.path
 
 from django.views.decorators.csrf import csrf_exempt
 
-PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
+PROJECT_DIR = usual_data.project_dir
 
 def index(request):
     template = "index.html"
@@ -22,6 +21,7 @@ def index(request):
     
     #Iterate over the location containing all dockerfiles and return printable data
     docker_location = os.path.join(PROJECT_DIR, usual_data.location)
+    print(docker_location)
     for element in listdir(docker_location):
         element_location = os.path.join(docker_location, element)
         #Element is a project directory

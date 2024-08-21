@@ -8,6 +8,12 @@ import docker_utils
 
 project_data_location = "manager_project_data"
 
+#TODO: Do all function
+def update_files_and_images():
+    update_files()
+    projects_build_save_images()
+
+
 #Update files for all projects, to do so checks for the latest commit and updates if and only if there is a newer commit
 def update_files():
     #Initialize data
@@ -98,4 +104,4 @@ if __name__ == "__main__":
             globals()[sys.argv[1]](sys.argv[2])
     #Default process
     else:
-        update_files()
+        update_files_and_images()
