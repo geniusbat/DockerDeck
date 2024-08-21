@@ -8,10 +8,43 @@ import docker_utils
 
 project_data_location = "manager_project_data"
 
-#TODO: Do all function
+#Do everything function
 def update_files_and_images():
-    update_files()
-    projects_build_save_images()
+    #Initialize data
+    g = github_utils.get_github()
+    data = load_project_data()
+
+    #Iterate over repositories 
+    for repository_name in usual_data.repositories:
+        repo = github_utils.get_repository(g, repository_name)
+        current_date = github_utils.get_repo_last_update(repo)
+        updated_files = []
+
+        #Project not seen before
+        if repository_name not in data:
+            #Get and save files
+            files = github_utils.get_docker_related_files(g, repo)
+            updated_files = github_utils.save_files(repository_name, files)
+            #Update data
+            data[repository_name] = current_date.isoformat()
+        #Project seen before
+        else:
+            #Check if saved commit is older than current commit
+            if datetime.fromisoformat(data[repository_name]) < current_date:
+                #Get and save files
+                files = github_utils.get_docker_related_files(g, repo)
+                updated_files = github_utils.save_files(repository_name, files)
+                #Update data
+                data[repository_name] = current_date.isoformat()
+        
+        #Create images
+        if len(updated_files)>0:
+            docker_utils.project_build_save_images_given_contentFiles(repository_name, updated_files)
+    
+    #Save data
+    save_project_data(data)
+    
+    github_utils.close_connection(g)
 
 
 #Update files for all projects, to do so checks for the latest commit and updates if and only if there is a newer commit
@@ -24,12 +57,13 @@ def update_files():
     for repository_name in usual_data.repositories:
         repo = github_utils.get_repository(g, repository_name)
         current_date = github_utils.get_repo_last_update(repo)
+        updated_files = []
 
         #Project not seen before
         if repository_name not in data:
             #Get and save files
             files = github_utils.get_docker_related_files(g, repo)
-            github_utils.save_files(repository_name, files)
+            updated_files = github_utils.save_files(repository_name, files)
             #Update data
             data[repository_name] = current_date.isoformat()
         #Project seen before
@@ -38,7 +72,7 @@ def update_files():
             if datetime.fromisoformat(data[repository_name]) < current_date:
                 #Get and save files
                 files = github_utils.get_docker_related_files(g, repo)
-                github_utils.save_files(repository_name, files)
+                updated_files = github_utils.save_files(repository_name, files)
                 #Update data
                 data[repository_name] = current_date.isoformat()
     

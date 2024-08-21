@@ -34,6 +34,34 @@ def project_build_save_images(project_name):
     #Remove the cloned repository
     delete_dir("clone_repo/")
 
+def project_build_save_images_given_contentFiles(project_name, files):
+    #Initialize stuff
+    client = docker.from_env()
+    g = github_utils.get_github()
+    repo = github_utils.get_repository(g, project_name)
+    repo_url = repo.clone_url
+    #Get the location of all Dockerfile files
+    docker_files = [x.path for x in files if "Dockerfile" in x.name or "er-compose" in x.name]
+    github_utils.close_connection(g)
+    #Clone a repository
+    #First if clone_repo dir exists remove it
+    if os.path.exists("clone_repo/"):
+        delete_dir("clone_repo/")
+    Repo.clone_from(repo_url, "clone_repo/")
+    time.sleep(0.2)
+    for file in docker_files:
+        #Only create image if it is allowed
+        if can_create_image_from_file(project_name, file):
+            image, output = build_image(client, file, project_name)
+            time.sleep(1)
+            save_image(project_name, image, file)
+            time.sleep(0.5)
+            #Delete created image as only needed to save it as tar
+            client.images.remove(image.id, force=True)
+
+    #Remove the cloned repository
+    delete_dir("clone_repo/")
+
 #This will force the creation of the image, even if it shouldn't be created
 def project_build_save_specific_image(project_name, file_name):
     #Initialize stuff
